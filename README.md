@@ -5,7 +5,7 @@ You must create an app from developer.spotify.com and set the redirect URI to ht
 2. In terminal, cd into client folder and run the following:
     npm i axios
     npm i react-spotify-web-playback
-    npm spotify-web-api-node
+    npm i spotify-web-api-node
     npm i bootstrap react-bootstrap
 
 3. Then cd into server folder and run the following:
