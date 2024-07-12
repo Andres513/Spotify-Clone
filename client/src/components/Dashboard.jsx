@@ -36,7 +36,6 @@ export default function Dashboard({ code }) {
         spotifyApi.searchTracks(search).then(res => {
             if(cancel) return
             setSearchResults(res.body.tracks.items.map(track =>{
-
                 const largestAlbumImage = track.album.images.reduce((largest, image) => {
                     if(image.height > largest.height) return image
                     return largest
