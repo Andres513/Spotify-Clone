@@ -3,7 +3,6 @@ import UseAuth from './UseAuth'
 import TrackResults from './TrackResults'
 import Player from './Player'
 import { useState, useEffect } from 'react'
-import { Container, Form } from 'react-bootstrap'
 import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
@@ -15,9 +14,12 @@ export default function Dashboard({ code }) {
     const [search, setSearch] = useState("")
     const [searchResults, setSearchResults] = useState([])
     const [currentTrack, setCurrentTrack] = useState()
+    const [backImage, setBackImage] = useState()
 
     function chooseTrack(track) {
         setCurrentTrack(track)
+        setBackImage(track.albumUrl)
+        console.log(track)
         setSearch('')
     }
 
@@ -29,45 +31,43 @@ export default function Dashboard({ code }) {
     useEffect(()=> {
         if(!search) return setSearchResults([])
         if(!accessToken) return
-
         let cancel = false
+
         spotifyApi.searchTracks(search).then(res => {
             if(cancel) return
             setSearchResults(res.body.tracks.items.map(track =>{
 
-                const smallestAlbumImage = track.album.images.reduce((smallest, image) => {
-                    if(image.height < smallest.height) return image
-                    return smallest
+                const largestAlbumImage = track.album.images.reduce((largest, image) => {
+                    if(image.height > largest.height) return image
+                    return largest
                 },track.album.images[0])
 
                 return {
                     artist: track.artists[0].name,
                     title: track.name,
                     uri: track.uri,
-                    albumUrl: smallestAlbumImage.url
+                    albumUrl: largestAlbumImage.url
                 }
             }))
             return () => cancel = true
     })},[search, accessToken])
-
   return (
     <>
-    <Container className='d-flex flex-column py-2' style={{
-        height: '100vh',
-    }}>
-        <Form.Control type="search" placeholder="Search Songs/Artists" value={search} onChange={e=> setSearch(e.target.value)}/>
-        <div className="flex-grow-1 my-2" style={{
-            overflowY: 'auto'}}>
-            {
+        <div className='player-container'>
+        <input type='search' placeholder='Search for Song/Artist' value={search}
+        onChange={e => setSearch(e.target.value)}/>
+        {
             searchResults.map(track => (
                 <TrackResults track={track} key={track.uri}
                     chooseTrack={chooseTrack}/>))
             }
+        <div className="track-player" style= {{backgroundImage: searchResults.length === 0 ? `url(${backImage})`: 'none'}}>
         </div>
-        <div>
-            <Player styles={{ backgroundColor: '#fff'}} accessToken={accessToken} trackUri={currentTrack?.uri}/>
+        
+        <div className='player'>
+            <Player accessToken={accessToken} trackUri={currentTrack?.uri}/>
         </div>
-    </Container>
+        </div>
     
     </>
   )
