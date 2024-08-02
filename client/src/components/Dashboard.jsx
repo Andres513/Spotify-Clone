@@ -44,22 +44,25 @@ export default function Dashboard({ code }) {
                 return {
                     artist: track.artists[0].name,
                     title: track.name,
+                    album: track.album,
                     uri: track.uri,
                     albumUrl: largestAlbumImage.url
                 }
             }))
             return () => cancel = true
     })},[search, accessToken])
+    
+ 
   return (
     <>
         <div className='player-container'>
         <input type='search' placeholder='Search for Song/Artist' value={search}
         onChange={e => setSearch(e.target.value)}/>
-        {
+            {
             searchResults.map(track => (
-                <TrackResults track={track} key={track.uri}
-                    chooseTrack={chooseTrack}/>))
-            }
+                 <TrackResults track={track} key={track.uri}
+                     search={search} setSearch={setSearch} chooseTrack={chooseTrack}/>))
+             }
         <div className="track-player" style= {{backgroundImage: searchResults.length === 0 ? `url(${backImage})`: 'none'}}>
         </div>
         
