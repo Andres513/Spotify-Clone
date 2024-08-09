@@ -1,13 +1,17 @@
 import React from 'react'
 
-export default function TrackResults({ track, chooseTrack }) {
+export default function TrackResults({ track, chooseTrack, setClicked }) {
+   
     function handlePlay() {
         chooseTrack(track)
+        setClicked(true)
     }
-    //d-flex m-2 align-items-center
+    
   return (
     <>
-    <div className='search-result-list'
+
+
+ <div className='search-result-list'
     onClick={handlePlay}>
         <img src ={track.albumUrl} style={{height: '64px', width: '64px'}}/>
         <div className='result-item'>
@@ -15,6 +19,6 @@ export default function TrackResults({ track, chooseTrack }) {
             <div className='artist-title'>{track.artist}</div>
         </div>
     </div>
-    </>
+    </> 
   )
-}
+  }
