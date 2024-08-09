@@ -15,6 +15,7 @@ export default function Dashboard({ code }) {
     const [searchResults, setSearchResults] = useState([])
     const [currentTrack, setCurrentTrack] = useState()
     const [backImage, setBackImage] = useState()
+    const [clicked, setClicked] = useState(false)
 
     function chooseTrack(track) {
         setCurrentTrack(track)
@@ -28,7 +29,12 @@ export default function Dashboard({ code }) {
         spotifyApi.setAccessToken(accessToken)
     },[accessToken])
 
-    useEffect(()=> {
+    
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        if(clicked) setClicked(false)
+        if(search.length === 0) return
         if(!search) return setSearchResults([])
         if(!accessToken) return
         let cancel = false
@@ -44,28 +50,33 @@ export default function Dashboard({ code }) {
                 return {
                     artist: track.artists[0].name,
                     title: track.name,
-                    album: track.album,
+                    album: track.album.name,
                     uri: track.uri,
                     albumUrl: largestAlbumImage.url
                 }
             }))
-            return () => cancel = true
-    })},[search, accessToken])
-    
+        })
+    }
  
   return (
     <>
         <div className='player-container'>
+            <form className="search-results" onSubmit={handleSubmit}>
         <input type='search' placeholder='Search for Song/Artist' value={search}
         onChange={e => setSearch(e.target.value)}/>
-            {
+        <button type="submit">Submit</button>
+            </form>
+        {
+        !clicked ? (
             searchResults.map(track => (
-                 <TrackResults track={track} key={track.uri}
-                     search={search} setSearch={setSearch} chooseTrack={chooseTrack}/>))
-             }
-        <div className="track-player" style= {{backgroundImage: searchResults.length === 0 ? `url(${backImage})`: 'none'}}>
-        </div>
-        
+                 <TrackResults track={track} key={track.uri} setClicked={setClicked}
+                    chooseTrack={chooseTrack}/>))
+            ) : (
+            <div className="track-player" style= {{backgroundImage: `url(${backImage})`}}>
+            </div>
+            )
+        } 
+
         <div className='player'>
             <Player accessToken={accessToken} trackUri={currentTrack?.uri}/>
         </div>
