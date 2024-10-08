@@ -1,36 +1,62 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 
 export default function UseAuth({ code }) {
     const [accessToken, setAccessToken] = useState()
     const [refreshToken, setRefreshToken] = useState()
     const [expiresIn, setExpiresIn] = useState()
-    
 
     useEffect(() => {
-        axios.post('http://localhost:3001/login', {
-            code,
-        }).then(res => {
-            setAccessToken(res.data.accessToken)
-            setRefreshToken(res.data.refreshToken)
-            setExpiresIn(res.data.expiresIn)
-            window.history.pushState({}, null, '/')
-        }).catch(() => {
-            window.location = '/'
-        })
+        const fetchLogin = async () => {
+            if (!code) return
+            try {
+                const response = await fetch('http://localhost:3001/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        code
+                    }),
+                })
+                const req = await response.json();
+                setAccessToken(req.accessToken)
+                setRefreshToken(req.refreshToken)
+                setExpiresIn(req.expiresIn)
+
+                window.history.pushState({}, null, '/')
+
+            } catch (error) {
+                console.error(error)
+                window.location = "/"
+            }
+        }
+        fetchLogin()
     }, [code])
 
     useEffect(() => {
-        if (!refreshToken || !expiresIn) return
         const interval = setInterval(() => {
-            axios.post('http://localhost:3001/refresh', {
-                refreshToken
-            }).then(res => {
-                setAccessToken(res.data.accessToken)
-                setExpiresIn(res.data.expiresIn)
-            }).catch(() => {
-                window.location = '/'
-            })
+            if (!refreshToken || !expiresIn) return
+            const fetchRefresh = async () => {
+                try {
+                    const response = await fetch('http://localhost:3001/refresh', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            refreshToken
+                        }),
+                    })
+
+                    const req = await response.json()
+                    setAccessToken(req.accessToken)
+                    setExpiresIn(req.expiresIn)
+                } catch (error) {
+                    console.log('Error refreshing access token: ', error)
+                    window.location = '/'
+                }
+            }
+            fetchRefresh()
         }, (expiresIn - 60) * 1000)
 
         return () => {
