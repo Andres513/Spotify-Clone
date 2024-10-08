@@ -2,50 +2,49 @@ import React from 'react'
 import UseAuth from './UseAuth'
 import TrackResults from './TrackResults'
 import Player from './Player'
+import Profile from './Profile'
 import { useState, useEffect } from 'react'
 import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
-    clientID: '41d057fa0a1841388bf0cafb1110a811'
+    clientId: '41d057fa0a1841388bf0cafb1110a811'
 })
 
 export default function Dashboard({ code }) {
-    const accessToken = UseAuth({code})
+    const accessToken = UseAuth({ code })
     const [search, setSearch] = useState("")
     const [searchResults, setSearchResults] = useState([])
     const [currentTrack, setCurrentTrack] = useState()
     const [backImage, setBackImage] = useState()
-    const [clicked, setClicked] = useState(false)
+    const [trackSelected, setTrackSelected] = useState(false)
 
     function chooseTrack(track) {
         setCurrentTrack(track)
         setBackImage(track.albumUrl)
-        console.log(track)
         setSearch('')
     }
 
     useEffect(() => {
-        if(!accessToken) return
+        if (!accessToken) return
         spotifyApi.setAccessToken(accessToken)
-    },[accessToken])
+    }, [accessToken])
 
-    
+
     const handleSubmit = (event) => {
         event.preventDefault()
 
-        if(clicked) setClicked(false)
-        if(search.length === 0) return
-        if(!search) return setSearchResults([])
-        if(!accessToken) return
+        if (trackSelected) setTrackSelected(false)
+        if (!search) return setSearchResults([])
+        if (!accessToken) return
         let cancel = false
 
         spotifyApi.searchTracks(search).then(res => {
-            if(cancel) return
-            setSearchResults(res.body.tracks.items.map(track =>{
+            if (cancel) return
+            setSearchResults(res.body.tracks.items.map(track => {
                 const largestAlbumImage = track.album.images.reduce((largest, image) => {
-                    if(image.height > largest.height) return image
+                    if (image.height > largest.height) return image
                     return largest
-                },track.album.images[0])
+                }, track.album.images[0])
 
                 return {
                     artist: track.artists[0].name,
@@ -57,31 +56,38 @@ export default function Dashboard({ code }) {
             }))
         })
     }
- 
-  return (
-    <>
-        <div className='player-container'>
-            <form className="search-results" onSubmit={handleSubmit}>
-        <input type='search' placeholder='Search for Song/Artist' value={search}
-        onChange={e => setSearch(e.target.value)}/>
-        <button type="submit">Submit</button>
-            </form>
-        {
-        !clicked ? (
-            searchResults.map(track => (
-                 <TrackResults track={track} key={track.uri} setClicked={setClicked}
-                    chooseTrack={chooseTrack}/>))
-            ) : (
-            <div className="track-player" style= {{backgroundImage: `url(${backImage})`}}>
+    return (
+        <>
+            <div className='dashboard-container'>
+                <div className="profile-container">
+                    <Profile code={code} accessToken={accessToken} />
+                </div>
+                <form className="search-bar" onSubmit={handleSubmit}>
+                    <input type='search' placeholder='Search for Song/Artist' value={search}
+                        onChange={e => setSearch(e.target.value)} />
+                </form>
+                <div className="results-container">
+                    {
+                        !trackSelected ? (
+                            searchResults.map(track => (
+                                <TrackResults track={track} key={track.uri} setTrackSelected={setTrackSelected}
+                                    chooseTrack={chooseTrack} />))
+                        ) : (
+                            <>
+                                <div className="album-cover">
+                                    <img src={backImage} alt="Album Cover" />
+                                    <h2>{currentTrack?.artist} - {currentTrack?.title}</h2>
+                                    <h2>{currentTrack?.album}</h2>
+                                    <button className="return-button" onClick={() => setTrackSelected(false)}>Back</button>
+                                </div>
+                            </>
+                        )
+                    }
+                </div>
+                <div className='player'>
+                    <Player accessToken={accessToken} trackUri={currentTrack?.uri} />
+                </div>
             </div>
-            )
-        } 
-
-        <div className='player'>
-            <Player accessToken={accessToken} trackUri={currentTrack?.uri}/>
-        </div>
-        </div>
-    
-    </>
-  )
+        </>
+    )
 }
