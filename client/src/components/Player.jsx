@@ -10,8 +10,10 @@ export default function Player({ accessToken, trackUri }) {
         setPlay(true)
     },[trackUri])
 
+    // With updates this should never be null
     if(!accessToken) return null
     return (
+        // No need for Fragment
     <>
     
         <SpotifyPlayer

@@ -4,9 +4,13 @@ import { useState, useEffect } from 'react'
 export default function Profile({ accessToken }) {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
+  // Maybe have an error state, to display a fallback UI if the API call fails?
+  // Not necessary, just recommendation
+
   useEffect(() => {
 
     const getProfile = async () => {
+      // Access token should never be null
       if (!accessToken) return
       try {
         const response = await fetch('https://api.spotify.com/v1/me', {
@@ -31,6 +35,7 @@ export default function Profile({ accessToken }) {
   }
 
   return (
+    // No fragment needed
     <>
       <div className='profile-container'>
         <div className="p-item">Welcome, {displayName}!</div>

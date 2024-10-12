@@ -8,6 +8,7 @@ export default function TrackResults({ track, chooseTrack, setTrackSelected }) {
     }
 
     return (
+        // No need for fragment
         <>
             <div className='search-result-list'
                 onClick={handlePlay}>

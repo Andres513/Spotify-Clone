@@ -7,7 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 const code = new URLSearchParams(window.location.search).get('code')
 
 function App() {
+  // Conditional return
+  // if (!code) {
+  //   return <Login />
+  // }
 
+  // return <Dashboard code={code} />
+
+  // No need for fragment just return the terinary
   return (
     <>
       {
