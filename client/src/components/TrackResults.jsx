@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function TrackResults({ track, chooseTrack, setTrackSelected }) {
-
     function handlePlay() {
         chooseTrack(track)
         setTrackSelected(true)

@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: 'a170ad2c4056402e81316196ede04fb2'
+    clientId: ''
 })
 
 export default function Dashboard({ code }) {
