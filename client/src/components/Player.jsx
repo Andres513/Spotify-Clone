@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import SpotifyPlayer from 'react-spotify-web-playback'
 
 export default function Player({ accessToken, trackUri }) {
@@ -8,21 +7,14 @@ export default function Player({ accessToken, trackUri }) {
 
     useEffect(() => {
         setPlay(true)
-    },[trackUri])
+    }, [trackUri])
 
-    if(!accessToken) return null
     return (
-    <>
-    
-        <SpotifyPlayer
-        token={accessToken} 
-        showSaveIcon
-        callback={state =>{
-            if(!state.isPlaying) setPlay(false)
-        }}
-        play={play}
-        uris={trackUri ? [trackUri] : []}/> 
-      
-    </>
-  )
+        <SpotifyPlayer token={accessToken} showSaveIcon
+            callback={state => {
+                if (!state.isPlaying) setPlay(false)
+            }}
+            play={play}
+            uris={trackUri ? [trackUri] : []} />
+    )
 }
