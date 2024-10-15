@@ -8,7 +8,6 @@ export default function Profile({ accessToken }) {
 
   useEffect(() => {
     const getProfile = async () => {
-      if (!accessToken) return
       try {
         const response = await fetch('https://api.spotify.com/v1/me', {
           method: 'GET',
@@ -42,7 +41,5 @@ export default function Profile({ accessToken }) {
       <div className="p-item">Search for a song!</div>
       <button onClick={handleLogOut} className="logout-button">Log Out</button>
     </div>
-
-
   )
 }
