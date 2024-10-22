@@ -1,3 +1,21 @@
+// You must create an app from developer.spotify.com and set the redirect URI to http://localhost:3000
+
+// 1. Go into client folder >> src >> component >> Login.jsx and assign the client_ID variable with your client ID from your app
+// 2. Go into .env file in the server folder and enter your CLIENT_ID and CLIENT_SECRET values from your spotify app basic information settings
+
+// 3. In terminal, cd into client folder and type the following command
+//     npm i
+
+// 4. Then cd into server folder and run the following:
+//     npm i
+
+// 5. To run app, open terminal and cd into client folder and run the following:
+//     npm run dev
+
+// 6. Then open up another terminal window and cd into server folder and run the following:
+//     npm run devStart
+
+
 import React from 'react'
 import useAuth from './UseAuth'
 import TrackResults from './TrackResults'
@@ -16,7 +34,7 @@ export default function Dashboard({ code }) {
     const [searchResults, setSearchResults] = useState([])
     const [currentTrack, setCurrentTrack] = useState()
     const [backImage, setBackImage] = useState()
-    let trackSelected = !!currentTrack
+    const [trackSelected, setTrackSelected] = useState()
 
 
     const chooseTrack = (track) => {
@@ -57,7 +75,7 @@ export default function Dashboard({ code }) {
         setSearch(e.target.value)
     }
     const returnHandler = (e) => {
-        setCurrentTrack(null)
+        setTrackSelected(false)
     }
 
     return (
@@ -72,7 +90,7 @@ export default function Dashboard({ code }) {
                     !trackSelected ? (
                         searchResults.map(track => (
                             <TrackResults track={track} key={track.uri}
-                                chooseTrack={chooseTrack} trackSelected={trackSelected} />))
+                                chooseTrack={chooseTrack} trackSelected={trackSelected} setTrackSelected={setTrackSelected} />))
                     ) : (
                         <div className="album-cover">
                             <img src={backImage} alt="Album Cover" />
