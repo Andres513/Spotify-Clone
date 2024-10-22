@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function TrackResults({ track, chooseTrack }) {
+export default function TrackResults({ track, chooseTrack, setTrackSelected }) {
 
     const handlePlay = () => {
         chooseTrack(track)
+        setTrackSelected(true)
     }
 
     return (
