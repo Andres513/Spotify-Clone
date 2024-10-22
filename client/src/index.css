@@ -8,6 +8,7 @@ body {
   flex-direction: column;
   flex-wrap: wrap;
   overflow-y: auto;
+  width: 80%;
 }
 
 input {
@@ -56,7 +57,7 @@ input {
   margin-bottom: 0.5rem;
   overflow-y: auto;
   padding-top: 25px;
-  padding-bottom: 4em;
+  padding-bottom: 10em;
   position: relative;
 }
 
@@ -115,6 +116,10 @@ input {
   cursor: pointer;
 }
 
+.back-button {
+  border-radius: 0.3rem;
+}
+
 .login-button:hover {
   background-color: #218838;
   border-color: #1e7e34;
@@ -155,7 +160,6 @@ input {
 
   .profile-container {
     width: 75%;
-
     margin: 0 auto;
     max-width: 500px;
   }
@@ -163,5 +167,21 @@ input {
   .album-cover img {
     max-width: 75%;
     height: auto;
+  }
+}
+
+@media (min-width: 1920px) {
+
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 80%;
+    height: auto;
+  }
+
+  .album-cover img {
+    max-width: 50%;
+    max-height: auto;
   }
 }
