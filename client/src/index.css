@@ -170,7 +170,7 @@ input {
   }
 }
 
-@media (min-width: 1920px) {
+@media (max-width: 1920px) {
 
   .dashboard-container {
     display: flex;
@@ -181,7 +181,7 @@ input {
   }
 
   .album-cover img {
-    max-width: 50%;
+    max-width: 95%;
     max-height: auto;
   }
 }
