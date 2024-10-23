@@ -75,7 +75,7 @@ export default function Dashboard({ code }) {
     const onChangeHandler = (e) => {
         setSearch(e.target.value)
     }
-    const returnHandler = (e) => {
+    const returnHandler = () => {
         setTrackSelected(false)
     }
 
@@ -97,7 +97,7 @@ export default function Dashboard({ code }) {
                             <img src={backImage} alt="Album Cover" />
                             <h2>{currentTrack?.artist} - {currentTrack?.title}</h2>
                             <h3>{currentTrack?.album}</h3>
-                            <button className="return-button" onClick={returnHandler}>Back</button>
+                            <button className="back-button" onClick={returnHandler}>Back</button>
                         </div>
                     )
                 }
