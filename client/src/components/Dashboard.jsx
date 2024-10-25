@@ -1,7 +1,8 @@
 // You must create an app from developer.spotify.com and set the redirect URI to http://localhost:3000
 
-// 1. Go into client folder >> src >> component >> Login.jsx and assign the client_ID variable with your client ID from your app
-// 2. Go into .env file in the server folder and enter your CLIENT_ID and CLIENT_SECRET values from your spotify app basic information settings
+// 1. Go into client >> .env >> enter you client ID from your spotify app basic information settings
+
+// 2. Go into server >> .env >> enter your CLIENT_ID and CLIENT_SECRET values from your spotify app basic information settings
 
 // 3. In terminal, cd into client folder and type the following command
 //     npm i
@@ -25,7 +26,7 @@ import { useState, useEffect } from 'react'
 import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: '41d057fa0a1841388bf0cafb1110a811'
+    clientId: import.meta.env.VITE_CLIENT_ID
 })
 
 export default function Dashboard({ code }) {
